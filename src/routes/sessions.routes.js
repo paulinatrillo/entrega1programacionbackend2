@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 const router = Router();
 
 router.post('/login', (req, res, next) => {
-  passport.authenticate('login', (err, user, info) => {
+  passport.authenticate('login', { session: false }, (err, user, info) => {
     if (err) return next(err);
     if (!user) return res.status(401).json({ message: 'Credenciales inválidas' });
 
