@@ -25,4 +25,14 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.json({
+    id: req.user._id,
+    email: req.user.email,
+    first_name: req.user.first_name,
+    last_name: req.user.last_name,
+    role: req.user.role
+  });
+});
+
 export default router;
