@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
+import { auth } from '../middlewares/auth.js';
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/current', auth, (req, res) => {
   res.json({
     id: req.user._id,
     email: req.user.email,
