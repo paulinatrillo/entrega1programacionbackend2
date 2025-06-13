@@ -1,12 +1,14 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import JwtStrategy from 'passport-jwt';
+import passportJwt from 'passport-jwt';
 import User from '../models/user.js';
 import bcrypt from 'bcrypt';
 
 const LocalStrategyConstructor = LocalStrategy.Strategy;
-const JwtStrategyConstructor = JwtStrategy.Strategy;
-const ExtractJwt = JwtStrategy.ExtractJwt;
+const JwtStrategyConstructor = passportJwt.Strategy;
+const ExtractJwt = passportJwt.ExtractJwt;
+
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
 const JWT_OPTIONS = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -43,5 +45,5 @@ const jwtStrategy = new JwtStrategyConstructor(JWT_OPTIONS, async (jwt_payload, 
 export const initializePassport = () => {
   passport.use('login', localStrategy);
   passport.use('jwt', jwtStrategy);
-  passport.use('current', jwtStrategy); 
+  passport.use('current', jwtStrategy);
 };
