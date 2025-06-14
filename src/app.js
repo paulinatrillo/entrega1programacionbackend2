@@ -6,6 +6,7 @@ import passport from 'passport';
 import usersRouter from './routes/users.routes.js';
 import sessionsRouter from './routes/sessions.routes.js';
 import cartsRouter from './routes/carts.routes.js';
+import productsRouter from './routes/products.routes.js';
 import { initializePassport } from './config/passport.js';
 import User from './models/user.js';
 
@@ -34,6 +35,7 @@ app.use(passport.initialize());
 app.use('/api/users', usersRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/carts', cartsRouter);
+app.use('/api/products', productsRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
