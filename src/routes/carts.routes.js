@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import CartRepository from '../repositories/cartRepository.js';
+import { auth } from '../middlewares/auth.js';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     const newCart = await CartRepository.create();
     res.status(201).json(newCart);
@@ -12,7 +13,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:cid', async (req, res) => {
+router.get('/:cid', auth, async (req, res) => {
   try {
     const cart = await CartRepository.findById(req.params.cid);
     if (!cart) return res.status(404).json({ message: 'Carrito no encontrado' });
@@ -22,7 +23,7 @@ router.get('/:cid', async (req, res) => {
   }
 });
 
-router.post('/:cid/products/:pid', async (req, res) => {
+router.post('/:cid/products/:pid', auth, async (req, res) => {
   try {
     const cart = await CartRepository.addProduct(req.params.cid, req.params.pid);
     if (!cart) return res.status(404).json({ message: 'Carrito no encontrado' });
@@ -32,7 +33,7 @@ router.post('/:cid/products/:pid', async (req, res) => {
   }
 });
 
-router.delete('/:cid/products/:pid', async (req, res) => {
+router.delete('/:cid/products/:pid', auth, async (req, res) => {
   try {
     const cart = await CartRepository.removeProduct(req.params.cid, req.params.pid);
     if (!cart) return res.status(404).json({ message: 'Carrito no encontrado' });
@@ -42,7 +43,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
   }
 });
 
-router.put('/:cid/products/:pid', async (req, res) => {
+router.put('/:cid/products/:pid', auth, async (req, res) => {
   try {
     const { quantity } = req.body;
     if (!quantity || quantity < 1) {
@@ -58,7 +59,7 @@ router.put('/:cid/products/:pid', async (req, res) => {
   }
 });
 
-router.delete('/:cid', async (req, res) => {
+router.delete('/:cid', auth, async (req, res) => {
   try {
     const cart = await CartRepository.emptyCart(req.params.cid);
     if (!cart) return res.status(404).json({ message: 'Carrito no encontrado' });
