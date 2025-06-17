@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import productRepository from '../repositories/productRepository.js';
 import { auth } from '../middlewares/auth.js';
+import { authorize } from '../middlewares/authorize.js';
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.get('/:pid', async (req, res) => {
   }
 });
 
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, authorize(['admin']), async (req, res) => {
   try {
     const newProduct = await productRepository.create(req.body);
     res.status(201).json(newProduct);
@@ -33,7 +34,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-router.put('/:pid', auth, async (req, res) => {
+router.put('/:pid', auth, authorize(['admin']), async (req, res) => {
   try {
     const updated = await productRepository.update(req.params.pid, req.body);
     if (!updated) return res.status(404).json({ message: 'Producto no encontrado' });
@@ -43,7 +44,7 @@ router.put('/:pid', auth, async (req, res) => {
   }
 });
 
-router.delete('/:pid', auth, async (req, res) => {
+router.delete('/:pid', auth, authorize(['admin']), async (req, res) => {
   try {
     const deleted = await productRepository.delete(req.params.pid);
     if (!deleted) return res.status(404).json({ message: 'Producto no encontrado' });
