@@ -6,13 +6,13 @@ import usersRouter from './routes/users.routes.js';
 import sessionsRouter from './routes/sessions.routes.js';
 import cartsRouter from './routes/carts.routes.js';
 import productsRouter from './routes/products.routes.js';
+import passwordRouter from './routes/password.routes.js';
 import { initializePassport } from './config/passport.js';
 import User from './models/user.js';
 
 const app = express();
 
 app.use(express.json());
-
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
@@ -28,22 +28,19 @@ mongoose.connect(process.env.MONGO_URI)
   })
   .catch(err => console.log('❌ Error conectando a MongoDB:', err));
 
-
 initializePassport();
 app.use(passport.initialize());
-
 
 app.use('/api/users', usersRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
-
+app.use('/api/password', passwordRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Error interno del servidor' });
 });
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
